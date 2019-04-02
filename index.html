@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Tchack Poum</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+		<style>
+			body {
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+			}
+			#gui {
+    			position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+    			bottom: 0;
+				overflow: auto;
+    			z-index: 1000;
+    			width: 100%;
+			}
+			.flex-column {
+				display: flex;
+				flex-direction: column;
+			}
+			.flex-row {
+				display: flex;
+				flex-direction: row;
+			}
+			#gui-2 {
+				margin-top: 20px;
+			}
+			#canvas {
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				width: 100%;
+				height: 100%;
+			}
+			#keyboard {
+				display: none;
+			}
+			#controls {
+				display: flex;
+				flex-direction: column;
+				position: absolute;
+				z-index: 9999;
+				bottom: 25px;
+				left: 50%;
+				transform: translateX(-50%);
+			}
+			.button-group {
+				display: flex;
+				flex-direction: row;
+				margin-top: 25px;
+				margin-bottom: 15px;
+			}
+			.buttons {
+				display: flex;
+				flex-direction: column;
+				width: 100px;
+				height: 100px;
+			}
+			.selected {
+				background-color: #FFEB3B;
+				border-radius: 10px;
+			}
+			.messages {
+				text-align: center;
+				font-family: sans-serif;
+				font-weight: 100;
+				font-style: italic;
+				position: absolute;
+				bottom: 0;
+				right: 0;
+			}
+			.button:hover {
+				cursor: pointer;
+			}
+			.options {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-around;
+			}
+			.options img {
+				width: 25px;
+				height: 25px;
+			}
+			.icon img {
+				width: 100px;
+				height: 100px;
+    			margin-top: 7px;
+			}
+			#titles {
+				background-color: black;
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				width: 100%;
+				height: 100%;
+				display: flex;
+				flex-direction: row;
+				justify-content: center;
+    			align-items: center;
+    			z-index: 10000;
+			}
+			#titles h1 {
+				color: white;
+				vertical-align: middle;
+			    font-family: sans-serif;
+			    font-weight: 300;
+			    font-size: xx-large;
+			}
+			#titles .generique {
+				color: white;
+				vertical-align: middle;
+			    font-family: sans-serif;
+			    font-weight: 300;
+			    font-size: large;
+
+			    display: flex;
+			    flex-direction: column;
+			    text-align: center;
+
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%,-50%);
+			}
+			#titles.hidden {
+				display: none;
+			}
+			#titles .generique.hidden {
+				display: none;
+			}
+			a {
+				color: #2196F3;
+				text-decoration: none;
+			}
+			.hidden {
+				display: none;
+			}
+			#gui.hidden {
+				display: none;
+			}
+			.cr.highlight, .cr.number.highlight {
+				background-color: #680000;
+			}
+
+		</style>
+	</head>
+	<body>
+		
+		<div id="gui" class="flex-column hidden">
+			<div id="gui-1" class="flex-row"></div>
+			<div id="gui-2" class="flex-row"></div>
+		</div>
+
+        <div id="keyboard"></div>
+
+		<div id="titles" class="hidden">
+			<div id="generique" class="generique">
+				
+				<p><a href="https://github.com/arthursw/tchack-poum/">Tchack Poum</a> is a quick and dirty graphic music box experiment.</p>
+
+				<p>Developed with the open source libraries <a href="https://tonejs.github.io/">Tone.js</a> and <a href="http://paperjs.org">Paper.js</a></p>
+				
+				<p>Icons:</p>
+				<p>Drum, Tuba, Music, Keyboard, Cassette, Drum, Organ, Lyre, Mandolin, Banjo by Xinh Studio from the Noun Project</p>
+				<p>Trash Can by Adrien Coquet from the Noun Project</p>
+				<p>High and low volume by Setyo Ari Wibowo from the Noun Project</p>
+
+			</div>
+		</div>
+		
+		<div id="controls">
+
+			<div class="button-group">
+
+				<div class="buttons" data-instrument="0">
+					<div class="button icon"><img src="icons/drum.svg"></div>
+
+					<div class="options">
+						<div class="button low-volume volume"><img src="icons/low-volume.svg"></div>
+						<div class="button high-volmue volume"><img src="icons/high-volume.svg"></div>
+						<div class="button trash"><img src="icons/trash.svg"></div>
+					</div>
+				</div>
+
+				<div class="buttons" data-instrument="1">
+					<div class="button icon" ><img src="icons/drum2.svg"></div>
+
+					<div class="options">
+						<div class="button low-volume volume"><img src="icons/low-volume.svg"></div>
+						<div class="button high-volmue volume"><img src="icons/high-volume.svg"></div>
+						<div class="button trash"><img src="icons/trash.svg"></div>
+					</div>
+				</div>
+
+				<div class="buttons" data-instrument="2">
+					<div class="button icon" ><img src="icons/organ.svg"></div>
+
+					<div class="options">
+						<div class="button low-volume volume"><img src="icons/low-volume.svg"></div>
+						<div class="button high-volmue volume"><img src="icons/high-volume.svg"></div>
+						<div class="button trash"><img src="icons/trash.svg"></div>
+					</div>
+				</div>
+
+				<div class="buttons" data-instrument="3">
+					<div class="button icon" ><img src="icons/disc.svg"></div>
+
+					<div class="options">
+						<div class="button low-volume volume"><img src="icons/low-volume.svg"></div>
+						<div class="button high-volmue volume"><img src="icons/high-volume.svg"></div>
+						<div class="button trash"><img src="icons/trash.svg"></div>
+					</div>
+				</div>
+
+				<div class="buttons" data-instrument="4">
+					<div class="button icon" ><img src="icons/triangle.svg"></div>
+
+					<div class="options">
+						<div class="button low-volume volume"><img src="icons/low-volume.svg"></div>
+						<div class="button high-volmue volume"><img src="icons/high-volume.svg"></div>
+						<div class="button trash"><img src="icons/trash.svg"></div>
+					</div>
+				</div>
+
+				<div class="buttons" data-instrument="5">
+					<div class="button icon" ><img src="icons/banjo.svg"></div>
+
+					<div class="options">
+						<div class="button low-volume volume"><img src="icons/low-volume.svg"></div>
+						<div class="button high-volmue volume"><img src="icons/high-volume.svg"></div>
+						<div class="button trash"><img src="icons/trash.svg"></div>
+					</div>
+				</div>
+
+			</div>
+			
+			<div class="messages">Use your keyboard to trigger some notes - <a href="" id="about">About</a></div>
+			
+
+		</div>
+
+		<canvas id="canvas"></canvas>
+
+
+		<!-- <input type="file" onchange="loadFile()" onclick="Player.stop()" /> -->
+		
+		<script src="libs/Tween.js"></script>
+		<script src="libs/jquery.min.js"></script>
+		<script src="libs/paper-full.js"></script>
+		<script src="libs/webmidi.min.js"></script>
+		<script src="libs/dat.gui.min.js"></script>
+		<script src="libs/qwerty-hancock.js"></script>
+		<script src="libs/midiplayer.min.js"></script>
+		<!-- <script src="libs/midiplayer.js"></script> -->
+		<script src="libs/soundfont-player.min.js"></script>
+
+		<!-- <script src="libs/Tone.min.js"></script> -->
+		<script src="libs/Tone.js"></script>
+
+		<script src="libs/three.js"></script>
+		<script src="libs/WebGL.js"></script>
+
+		<script src="libs/OrbitControls.js"></script>
+		<script src="libs/CopyShader.js"></script>
+		<script src="libs/EffectComposer.js"></script>
+		<script src="libs/ShaderPass.js"></script>
+		<script src="libs/RenderPass.js"></script>
+
+		<script src="libs/synth.js"></script>
+
+		<script src="libs/tonal.min.js"></script>
+		
+		<!-- <script async type="module" src="js/shaders/checker.js"></script> -->
+		<!-- <script async type="module" src="js/shaders/fractal.js"></script> -->
+		<!-- <script async type="module" src="js/shaders/grid.js"></script> -->
+		<!-- <script async type="module" src="js/shaders/vertex.js"></script> -->
+		<!-- <script async type="module" src="js/chords.js"></script> -->
+		<!-- <script async type="module" src="js/concentricCircles.js"></script> -->
+		<!-- <script async type="module" src="js/lines.js"></script> -->
+		<!-- <script async type="module" src="js/mario.js"></script> -->
+		<!-- <script async type="module" src="js/painting.js"></script> -->
+		<!-- <script async type="module" src="js/synth.js"></script> -->
+		<!-- <script async type="module" src="js/shaders.js"></script> -->
+		<!-- <script async type="module" src="js/three-scene.js"></script> -->
+
+		<script src="main.js"></script>
+
+	</body>
+</html>
