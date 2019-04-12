@@ -1,12 +1,15 @@
+import * as music from './js/music.js';
+
 let scripts = [
     'music'
 ]
+
 
 let scriptsOrder = [0]
 let currentScriptOrderIndex = 0
 let currentTitleIndex = 0
 
-let module = null
+let module = music
 let soundModule = null
 let debugSocket = null
 let socket = null
@@ -18,12 +21,12 @@ let controllerNamesFractal = ['X', 'Y', 'Power', 'Phase', 'Zoom', 'Pulse', 'Colo
 
 let send = (type, data)=> {
     let message = { type: type, data: data }
-    if(debugSocket.readyState == debugSocket.OPEN){
-        debugSocket.send(JSON.stringify(message))
-    }
-    if(socket.readyState == socket.OPEN){
-        socket.send(JSON.stringify(message))
-    }
+    // if(debugSocket.readyState == debugSocket.OPEN){
+    //     debugSocket.send(JSON.stringify(message))
+    // }
+    // if(socket.readyState == socket.OPEN){
+    //     socket.send(JSON.stringify(message))
+    // }
 }
 
 let onMessage = (event)=> {
@@ -68,32 +71,31 @@ let onWebSocketError = (event)=> {
 }
 
 let loadSoundModule = (name)=> {
-    console.log('loadSoundModule ', name)
-    import('./js/sounds/' + name + '.js')
-        .then(m => {
+    // import('./js/sounds/' + name + '.js')
+    //     .then(m => {
 
-            if(soundModule && soundModule.deactivate) {
-                soundModule.deactivate()
-            }
-            soundModule = m
-            console.log('activate ', name)
+    //         if(soundModule && soundModule.deactivate) {
+    //             soundModule.deactivate()
+    //         }
+    //         soundModule = m
+    //         console.log('activate ', name)
 
-            if(soundModule.activate) {
-                soundModule.activate()
-            }
-        })
-        .catch(err => {
+    //         if(soundModule.activate) {
+    //             soundModule.activate()
+    //         }
+    //     })
+    //     .catch(err => {
 
-            if(soundModule) {
-                if(soundModule.deactivate) {
-                    soundModule.deactivate()
-                }
-                soundModule = null
-            }
+    //         if(soundModule) {
+    //             if(soundModule.deactivate) {
+    //                 soundModule.deactivate()
+    //             }
+    //             soundModule = null
+    //         }
 
-            console.log(err.message)
-            console.log(err)
-        });
+    //         console.log(err.message)
+    //         console.log(err)
+    //     });
 }
 
 let loadModule = (name, numTitles)=> {
@@ -107,25 +109,28 @@ let loadModule = (name, numTitles)=> {
         shader = name.replace('shader-', '')
         moduleName = 'shaders'
     }
-    import('./js/' + moduleName + '.js')
-            .then(m => {
-                if(module) {
-                    module.deactivate()
-                }
-                module = m
-                module.activate(shader, numTitles)
-                let knobNames = controllerNamesCity
-                if(shader && shader == 'fractal') {
-                    knobNames = controllerNamesFractal
-                }
-                let i=0
-                for(let knobController of knobControllers) {
-                    knobController.name(knobNames[i])
-                    i++
-                }
-            })
+    
+    module.activate(shader, numTitles)
 
-    loadSoundModule(name)
+    // import('./js/' + moduleName + '.js')
+    //         .then(m => {
+    //             if(module) {
+    //                 module.deactivate()
+    //             }
+    //             module = m
+    //             module.activate(shader, numTitles)
+    //             let knobNames = controllerNamesCity
+    //             if(shader && shader == 'fractal') {
+    //                 knobNames = controllerNamesFractal
+    //             }
+    //             let i=0
+    //             for(let knobController of knobControllers) {
+    //                 knobController.name(knobNames[i])
+    //                 i++
+    //             }
+    //         })
+
+    // loadSoundModule(name)
 
 }
 
@@ -379,7 +384,7 @@ let main = ()=> {
         document.body.appendChild( WEBGL.getWebGL2ErrorMessage() );
     }
 
-    module = loadModule(scripts[scriptsOrder[currentScriptOrderIndex]])
+    loadModule(scripts[scriptsOrder[currentScriptOrderIndex]])
 
     WebMidi.enable(function(err) {
 
@@ -551,9 +556,7 @@ let main = ()=> {
     window.addEventListener("keydown", onKeyDown)
     window.addEventListener("keyup", onKeyUp)
 
-    var canvas = document.getElementById('canvas');
-    paper.install(window);
-    paper.setup(canvas);
+    
 
     let clearCanvas = ()=> {
         paper.project.clear()
@@ -630,17 +633,17 @@ let main = ()=> {
 
     animate();
 
-    debugSocket = new WebSocket('ws://localhost:' + 4568)
-    debugSocket.addEventListener('message',  onMessage)
-    debugSocket.addEventListener('open',  onWebSocketOpen)
-    debugSocket.addEventListener('close',  onWebSocketClose)
-    debugSocket.addEventListener('error',  onWebSocketError)
+    // debugSocket = new WebSocket('ws://localhost:' + 4568)
+    // debugSocket.addEventListener('message',  onMessage)
+    // debugSocket.addEventListener('open',  onWebSocketOpen)
+    // debugSocket.addEventListener('close',  onWebSocketClose)
+    // debugSocket.addEventListener('error',  onWebSocketError)
 
-    socket = new WebSocket('ws://localhost:' + 3545)
-    socket.addEventListener('message',  onMessage)
-    socket.addEventListener('open',  onWebSocketOpen)
-    socket.addEventListener('close',  onWebSocketClose)
-    socket.addEventListener('error',  onWebSocketError)
+    // socket = new WebSocket('ws://localhost:' + 3545)
+    // socket.addEventListener('message',  onMessage)
+    // socket.addEventListener('open',  onWebSocketOpen)
+    // socket.addEventListener('close',  onWebSocketClose)
+    // socket.addEventListener('error',  onWebSocketError)
 
 }
 

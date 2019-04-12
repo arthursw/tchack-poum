@@ -1,3 +1,6 @@
+var canvas = document.getElementById('canvas');
+paper.install(window);
+paper.setup(canvas);
 
 let parameters = {
     strokeWidth: 4,
@@ -48,7 +51,7 @@ var buildTracksHtml = function() {
 }
 
 async function loadPlayer(instrument) {
-    var mario = await import('./mario.js');
+    // var mario = await import('./mario.js');
 
    // document.getElementById('loading').style.display = 'none';
     // document.getElementById('select-file').style.display = 'block';

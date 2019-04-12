@@ -32,6 +32,8 @@ for(let m of modules) {
     volumes.push(0.5)
 }
 
+volumes[2] = 0.1
+
 function initializeGUI() {
 
     $('.options').hide()
@@ -52,14 +54,14 @@ function initializeGUI() {
     $('.options .high-volmue').click(function() {
         let elem = $(this).parent().parent()
         let instrumentIndex = parseInt(elem.attr('data-instrument'))
-        volumes[instrumentIndex] = Math.min(1, volumes[instrumentIndex] + 0.2)
+        volumes[instrumentIndex] = Math.min(1, volumes[instrumentIndex] + 0.05)
         controlchange(instrumentIndex, 'slider', volumes[instrumentIndex])
     })
 
     $('.options .low-volume').click(function() {
         let elem = $(this).parent().parent()
         let instrumentIndex = parseInt(elem.attr('data-instrument'))
-        volumes[instrumentIndex] = Math.max(0, volumes[instrumentIndex] - 0.2)
+        volumes[instrumentIndex] = Math.max(0, volumes[instrumentIndex] - 0.05)
         controlchange(instrumentIndex, 'slider', volumes[instrumentIndex])
     })
 
@@ -157,6 +159,9 @@ export function activate() {
         group.addChild(module.group)
     }
     initializeGUI()
+
+    let db = Tone.gainToDb(volumes[2])
+    modules[2].synth.volume.value = db
 }
 
 export function deactivate() {
